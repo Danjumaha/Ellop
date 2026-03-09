@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Methods | U.N / U.S. Department of the Treasury</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        .header {
+            background-color: #004c97;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+
+        .header-logo {
+            width: 50px;
+            height: auto;
+            border: none;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 600;
+            font-family: "Times New Roman", serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 32px;
+            color: #004c97;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .notice-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 16px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+            font-size: 16px;
+            color: #5d4037;
+        }
+
+        .notice-box strong {
+            color: #e65100;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .payment-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-top: 3px solid #004c97;
+            transition: transform 0.2s;
+        }
+
+        .payment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .payment-card h3 {
+            font-size: 20px;
+            color: #004c97;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-card h3 i {
+            font-size: 20px;
+            color: #004c97;
+        }
+
+        .payment-card p {
+            color: #555;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #777;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .header-title {
+                font-size: 19px;
+            }
+            .page-title {
+                font-size: 26px;
+            }
+            .payment-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+    <header class="header">
+        <img src="epc.jpg" alt="Seal" class="header-logo" />
+        <div class="header-title">U.N / U.S. DEPARTMENT OF THE TREASURY</div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Accepted Payment Methods</h1>
+        <p class="subtitle">For official disbursement processing and fiscal compliance</p>
+
+        <div class="notice-box">
+            <strong>Important Notice:</strong> All transactions are processed under U.S. federal guidelines. 
+            This program is <strong>not affiliated with any Nigerian entity, scheme, or individual</strong>. 
+            Any claim suggesting "Nigeria involvement" is false and misleading.
+        </div>
+
+        <div class="payment-grid">
+            <!-- PayPal -->
+            <div class="payment-card">
+                <h3><i class="fab fa-paypal"></i> PayPal</h3>
+                <p>Secure digital payments via verified PayPal accounts. Funds are traceable and compliant with U.S. financial regulations.</p>
+            </div>
+
+            <!-- Wire Transfer -->
+            <div class="payment-card">
+                <h3><i class="fas fa-exchange-alt"></i> Wire Transfer</h3>
+                <p>International or domestic bank wire transfers. Requires SWIFT/BIC and full banking details for verification.</p>
+            </div>
+
+            <!-- Cash Deposit -->
+            <div class="payment-card">
+                <h3><i class="fas fa-money-bill-wave"></i> Cash Deposit</h3>
+                <p>In-person cash deposits at authorized U.S. Treasury partner banks. A valid government-issued ID is required.</p>
+            </div>
+
+            <!-- Cryptocurrency -->
+            <div class="payment-card">
+                <h3><i class="fas fa-coins"></i> Cryptocurrency</h3>
+                <p>Accepted in Bitcoin (BTC) or Ethereum (ETH) only. Transactions must be reported for IRS compliance.</p>
+            </div>
+
+            <!-- Money Order -->
+            <div class="payment-card">
+                <h3><i class="fas fa-receipt"></i> Money Order</h3>
+                <p>U.S. Postal Service or bank-issued money orders payable to "U.S. Department of the Treasury".</p>
+            </div>
+
+            <!-- Cashier's Check -->
+            <div class="payment-card">
+                <h3><i class="fas fa-file-invoice-dollar"></i> Cashier's Check</h3>
+                <p>Official bank-issued check with guaranteed funds. Must be drawn from a U.S.-based financial institution.</p>
+            </div>
+
+            <!-- Personal Check -->
+            <div class="payment-card">
+                <h3><i class="fas fa-pen-fancy"></i> Personal Check</h3>
+                <p>Handwritten checks accepted with valid routing and account number. Allow 7–10 business days for clearance.</p>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            All payment methods are subject to verification, audit, and U.S. federal compliance protocols.<br>
+            Fraudulent claims or misrepresentation will be reported to the Treasury Inspector General.
+        </div>
+    </div>
+</body>
+</html>

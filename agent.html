@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Assistance Live Agent | U.N / U.S. Department of the Treasury</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-card: white;
+            --text-primary: #333;
+            --header-bg: #004c97;
+            --bot-bg: #eef5ff;
+            --user-bg: #004c97;
+            --border-color: #ddd;
+            --input-bg: #fff;
+            --typing-dot: #004c97;
+        }
+
+        .dark-mode {
+            --bg-primary: #121212;
+            --bg-card: #1e1e1e;
+            --text-primary: #f0f0f0;
+            --header-bg: #003a75;
+            --bot-bg: #2a3a50;
+            --user-bg: #005f9e;
+            --border-color: #333;
+            --input-bg: #2c2c2c;
+            --typing-dot: #64b5f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s;
+        }
+
+        .header {
+            background-color: var(--header-bg);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .header-logo {
+            width: 50px;
+            height: auto;
+            border: none;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 600;
+            font-family: "Times New Roman", serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-toggle {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .chat-container {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            height: 72vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 16px 20px;
+            background-color: var(--header-bg);
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-header::before {
+            content: "🟢";
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 14px 18px;
+            border-radius: 20px;
+            line-height: 1.55;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+            word-wrap: break-word;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bot {
+            background-color: var(--bot-bg);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border-bottom-left-radius: 6px;
+        }
+
+        .user {
+            background-color: var(--user-bg);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 6px;
+        }
+
+        .typing {
+            align-self: flex-start;
+            background: none;
+            padding: 0;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 12px 0;
+        }
+
+        .typing-indicator span {
+            width: 9px;
+            height: 9px;
+            background-color: var(--typing-dot);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 15px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            gap: 10px;
+        }
+
+        .voice-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--header-bg);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .voice-btn.recording {
+            background: #d32f2f;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(211, 47, 47, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+        }
+
+        .chat-input {
+            flex: 1;
+            position: relative;
+        }
+
+        .chat-input input {
+            width: 100%;
+            padding: 14px 20px 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            font-size: 16px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--header-bg);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .disclaimer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--header-bg);
+        }
+
+        /* Make links in bot messages styled */
+        .bot a {
+            color: #004c97;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        .dark-mode .bot a {
+            color: #64b5f6;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="epc.jpg" alt="Seal" class="header-logo" />
+        <div class="header-title">
+             ASSISTANCE LIVE AGENT
+        </div>
+        <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                Official Live Support Agent
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    Hello! 👋 I'm your Official Assistance Agent from the U.N / U.S. Department of the Treasury.  
+                    How can I help you today? You can ask about:
+                    <ul style="margin-top: 8px; padding-left: 20px; margin-bottom: 0;">
+                        <li>Economic Impact Payment eligibility</li>
+                        <li>Application process</li>
+                        <li>Payment methods</li>
+                        <li>Upfront fees</li>
+                        <li>Contact information</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <button class="voice-btn" id="voiceBtn" title="Voice Input">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <div class="chat-input">
+                    <input type="text" id="userInput" placeholder="Type or speak your question..." />
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <p class="disclaimer">
+            This Live Agent provides automated support for government assistance inquiries only.
+        </p>
+    </div>
+
+    <script>
+        // DOM Elements
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Dark mode toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        });
+
+        // Payment options list (for dynamic reply)
+        const paymentOptionsList = `
+            <ul style="margin: 10px 0 12px 20px; padding-left: 0; list-style: none; line-height: 1.6;">
+                <li>• Bank Transfer</li>
+                <li>• Cash Deposit</li>
+                <li>• Cash Mailing</li>
+                <li>• Wire Transfer</li>
+                <li>• PayPal</li>
+                <li>• Cash App</li>
+                <li>• Cryptocurrency</li>
+                <li>• Zelle</li>
+                <li>• Money Order</li>
+                <li>• Cashier Check</li>
+                <li>• Personal Check</li>
+            </ul>
+            <p><a href="contact.html" target="_blank">contact official Agent to ask for Payment details</a></p>
+        `;
+
+
+
+
+
+
+
+        const  ContactList = `
+ 
+            <p><a href="contact.html" target="_blank">Contact official Agent for more inquiry</a></p>
+        `;
+
+
+
+
+
+        // Expanded knowledge base with your exact Q&A
+        const responses = {
+            // Greetings
+            "hello": "Hello! How can I assist you with your Economic Impact Payment today?",
+            "hi": "Hi there! I'm here to help with your government assistance inquiry.",
+            "hey": "Hey! What can I help you with regarding your payment or application?",
+
+            // Gratitude
+            "thank": "You're welcome! If you have more questions, feel free to ask.",
+            "thanks": "You're very welcome! 😊",
+            "thank you": "My pleasure! Let me know if you need further assistance.",
+
+            // Reactions
+            "wow": "I know! The Economic Impact Payment program is designed to provide quick relief to eligible individuals.",
+            "cool": "Glad you find it helpful! Is there anything specific you'd like to know?",
+            "nice": "Thank you! I'm here to make the process as smooth as possible.",
+            "great": "Wonderful! How else can I assist you today?",
+
+            // YOUR QUESTIONS & ANSWERS
+            "eligible": "Once you have been referred by friends, family and groups, you are deemed to apply for validation and verification , Make Sure you Submit the Applicant form .",
+            "eligibility": "Once you have been referred by friends, family and groups, you are deemed to apply for validation and verification.",
+            "apply": "Once you have been referred by friends, family and groups, you are deemed to apply for validation and verification.",
+
+            "tax": "Yes, you are to pay 2-10% of your entitlement to payment platforms that will be specified to you by your referral commissioner.",
+            "income tax": "Yes, you are to pay 2-10% of your entitlement to payment platforms that will be specified to you by your referral commissioner.",
+            "pay tax": "Yes, you are to pay 2-10% of your entitlement to payment platforms that will be specified to you by your referral commissioner.",
+
+            "citizen": "No, Economic Impact Payment (EIP) is open to US citizens and other United Nations participating-countries.",
+            "us citizen": "No, Economic Impact Payment (EIP) is open to US citizens and other United Nations participating-countries.",
+            "only us": "No, Economic Impact Payment (EIP) is open to US citizens and other United Nations participating-countries.",
+
+            "how much": "You can get as much AGI accumulated margins usually $1,775,000.00 to $2,150,000.00 for single and married couples. Depending on the number of family.",
+            "amount": "You can get as much AGI accumulated margins usually $1,775,000.00 to $2,150,000.00 for single and married couples. Depending on the number of family.",
+            "get money": "You can get as much AGI accumulated margins usually $1,775,000.00 to $2,150,000.00 for single and married couples. Depending on the number of family.",
+
+            "upfront fee": "Yes. The upfront fees attached are meant for the incoming taxes, certification, insurance, process and delivery settlements. The payment receipts are set to be a tangible proofs of payment as it serve fiscal responsibility.",
+            "why pay upfront": "Yes. The upfront fees attached are meant for the incoming taxes, certification, insurance, process and delivery settlements. The payment receipts are set to be a tangible proofs of payment as it serve fiscal responsibility.",
+            "fee": "Yes. The upfront fees attached are meant for the incoming taxes, certification, insurance, process and delivery settlements. The payment receipts are set to be a tangible proofs of payment as it serve fiscal responsibility.",
+
+            "covid relief": "No, they are although related but have slight differences. The Economic Impact Payment (EIP) is extended with large check or cash while the Covid relief funds are minimal and periodic.",
+            "same as covid": "No, they are although related but have slight differences. The Economic Impact Payment (EIP) is extended with large check or cash while the Covid relief funds are minimal and periodic.",
+
+            "pay back": "No, any funds received from the Economic Impact Payment (EIP) are not meant to be paid back once the upfront fees attached has been fully settled.",
+            "repay": "No, any funds received from the Economic Impact Payment (EIP) are not meant to be paid back once the upfront fees attached has been fully settled.",
+
+            "extra charges": "Yes. It is possible, depending on your affiliation clearance. Since EIP is affiliated with IRS, the bond needs to be protected and legally settled.",
+            "additional fee": "Yes. It is possible, depending on your affiliation clearance. Since EIP is affiliated with IRS, the bond needs to be protected and legally settled.",
+
+            "who pay": "Only the referral agents/commissioners handle the payment sections as they direct every payments from the applicants to the appropriate fields, departments and sources.",
+            "pay to who": "Only the referral agents/commissioners handle the payment sections as they direct every payments from the applicants to the appropriate fields, departments and sources.",
+
+            "chairman": "Economic Impact Payment (EIP) does not have a central executive chairman but the counterparts and officials in charge of treasury. E.g agents, commissioner and other personnel.",
+            "executive": "Economic Impact Payment (EIP) does not have a central executive chairman but the counterparts and officials in charge of treasury. E.g agents, commissioner and other personnel.",
+
+            "speak agent": "Depending on their availability. Due to the number of applicants online at a particular time, phone conversations may not be available.",
+            "talk to agent": "Depending on their availability. Due to the number of applicants online at a particular time, phone conversations may not be available.",
+            "call agent": "Depending on their availability. Due to the number of applicants online at a particular time, phone conversations may not be available.",
+ 
+
+
+            // PAYMENT OPTIONS TRIGGER
+            "payment method": `You can make your payment with the listed payment options below:${paymentOptionsList}`,
+            "how do i pay": `You can make your payment with the listed payment options below:${paymentOptionsList}`,
+            "payment option": `You can make your payment with the listed payment options below:${paymentOptionsList}`,
+            "make payment": `You can make your payment with the listed payment options below:${paymentOptionsList}`,
+            "pay": `You can make your payment with the listed payment options below:${paymentOptionsList}`,
+             "contact agent": `You can contact Official Agent with link below :${ContactList}`,
+             "contact information": `You can contact Official Agent with link below :${ContactList}`,
+            "reach agent": `You can contact Official Agent with link below :${ContactList}`,
+            "get through agent": `You can contact Official Agent with link below :${ContactList}`,
+            
+            
+            
+            
+            
+            
+        };
+
+        // Off-topic guardrail message
+        const offTopicReply = "This website is for U.S./U.N. Treasury and Economic Impact Payment assistance only. I can't help with unrelated topics. Please ask about payments, eligibility, forms, or contact info.";
+
+        // Add message to chat (with HTML support for links)
+        function addMessage(htmlContent, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
+            messageDiv.innerHTML = htmlContent;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Show typing indicator
+        function showTyping() {
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('message', 'typing');
+            typingDiv.innerHTML = `
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return typingDiv;
+        }
+
+        // Remove typing indicator
+        function hideTyping(typingElement) {
+            if (typingElement && typingElement.parentNode) {
+                typingElement.parentNode.removeChild(typingElement);
+            }
+        }
+
+        // Get AI response
+        function getBotResponse(userMsg) {
+            const msg = userMsg.toLowerCase().trim();
+            
+            if (!msg) return "Please type a question so I can assist you!";
+            
+            // Greetings & thanks
+            if (msg.includes("hello") || msg.includes("hi") || msg.includes("hey")) {
+                return responses["hello"];
+            }
+            if (msg.includes("thank")) {
+                return responses["thank"];
+            }
+            if (["wow", "cool", "nice", "great"].includes(msg)) {
+                return responses[msg];
+            }
+
+            // Check knowledge base
+            for (const [key, response] of Object.entries(responses)) {
+                if (msg.includes(key)) {
+                    return response;
+                }
+            }
+
+            // Off-topic keywords
+            const offTopicKeywords = ["weather", "joke", "movie", "game", "song", "love", "pizza", "sports", "nigeria", "scam"];
+            if (offTopicKeywords.some(kw => msg.includes(kw))) {
+                return offTopicReply;
+            }
+
+            // General fallback
+            return "I'm an automated Agent focused on Economic Impact Payments. Please ask about eligibility, payments, forms, or contact information. A human agent will reach out if needed.";
+        }
+
+        // Handle send
+        function handleSend() {
+            const msg = userInput.value.trim();
+            if (!msg) return;
+
+            addMessage(msg, 'user');
+            userInput.value = '';
+
+            const typingEl = showTyping();
+            setTimeout(() => {
+                hideTyping(typingEl);
+                const botReply = getBotResponse(msg);
+                addMessage(botReply, 'bot');
+            }, 4500 + Math.random() * 900);
+        }
+
+        // Voice recognition
+        let recognition;
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                userInput.value = transcript;
+                handleSend();
+                voiceBtn.classList.remove('recording');
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+            };
+
+            recognition.onerror = () => {
+                voiceBtn.classList.remove('recording');
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                alert("Voice recognition failed. Please try again.");
+            };
+
+            voiceBtn.addEventListener('click', () => {
+                if (recognition) {
+                    voiceBtn.classList.add('recording');
+                    voiceBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                    recognition.start();
+                } else {
+                    alert("Voice input not supported in this browser.");
+                }
+            });
+        } else {
+            voiceBtn.style.opacity = "0.5";
+            voiceBtn.title = "Voice input not supported";
+        }
+
+        // Event listeners
+        sendBtn.addEventListener('click', handleSend);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+    </script>
+</body>
+</html>

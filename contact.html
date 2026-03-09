@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    
+    
+    <title>Contact | U.N / U.S. Department of the Treasury</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family:   ;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: black;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #004c97;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+
+        .header-logo {
+            width: 50px;
+            height: auto;
+            border: none;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 600;
+            font-family: "Times New Roman", serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            color: #004c97;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .contact-intro {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 18px;
+            color: black;
+            line-height: 1.7;
+        }
+
+        .contact-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 4px solid #004c97;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            background-color: #eef5ff;
+           
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .icon img {
+            width: 54px;
+            height: 54px;
+        }
+
+        .contact-info h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #004c97;
+        }
+
+        .contact-info p {
+            margin: 0;
+            font-size: 16px;
+            color: black;
+        }
+
+        .contact-info a {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .contact-info a:hover {
+            color: #004c97;
+            text-decoration: underline;
+        }
+ 
+
+  
+  
+ hr {
+  border: none;
+  height: 1.5px;
+  background-color: #004c97; /* Official-looking dark blue */
+  margin: 2px 0;
+}
+
+
+
+
+
+
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 90px;
+            right: 9px;
+            width: 60px;
+            height: 60px;
+             background-color:  white;
+             
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 15px 15px 20px rgba(37, 211, 102, 0.4);
+            z-index: 100;
+        }
+
+        .whatsapp-float img {
+            width: 52px;
+            height: 52px;
+        }
+
+        @media (max-width: 600px) {
+            .header-title {
+                font-size: 18px;
+            }
+            .section-title {
+                font-size: 26px;
+            }
+            .contact-intro {
+                font-size: 16px;
+            }
+            .contact-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .icon {
+                align-self: flex-start;
+            }
+        }
+        
+        
+        
+        
+                /* Back Button */
+        .back-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #004c97;
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: background-color 0.2s;
+            font-family: "Times New Roman";
+        }
+
+        .back-button:hover {
+            background-color: #003a75;
+        }
+
+        
+        
+        
+        
+        
+        
+        
+        
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="epc.jpg" alt="Seal" class="header-logo" />
+        <div class="header-title">U.N / U.S. DEPARTMENT OF THE TREASURY</div>
+    </header>
+
+    <div class="container">
+        <h1 class="section-title">Contact Assistance Agent</h1>
+        <p class="contact-intro">
+            Reach out to a certified assistance Agent for support with your application, eligibility verification, or payment inquiries.  
+            Our team is available to ensure your Economic Impact Payment process is smooth and secure.
+        </p>
+
+        <div class="contact-cards">
+            <!-- WhatsApp -->
+ 
+
+            <!-- SMS -->
+            <div class="contact-card">
+                <div class="icon">
+                                        <img src="sms.jpg" alt="WhatsApp" />
+                </div>
+                <div class="contact-info">
+                    <h3>Send a Text (SMS)</h3>
+                    <p>Prefer texting? Send your inquiry via SMS:</p>
+                    <a href="sms:+14482102060">
+                                             Click Here To Reach Our Agent 
+                      <hr></a>
+                </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="contact-card">
+                <div class="icon">
+                    <img src="phone.jpg" alt="Phone" />
+                </div>
+                <div class="contact-info">
+                    <h3>Phone Call</h3>
+                    <p>Speak directly with an assistance Agent:</p>
+                    <a href="tel:+14482102060"> 
+                                            Click Here To Reach Our Agent <hr></a>
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="contact-card">
+                <div class="icon">
+                    <img src="mail.jpg" alt="Email" />
+                </div>
+                <div class="contact-info">
+                    <h3>Email Support</h3>
+                    <p>Send a detailed message to our secure inbox:</p>
+                    
+                    <div class="mail"> 
+                    <a href="mailto:economicimpactpaymentsus@gmail.com"> 
+                       Click Here To Reach Our Agent
+                       <hr>
+                       
+                       </a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+    
+    
+        <!-- Back to Home Button -->
+    <div class="back-button-container">
+        <a href="index.html" class="back-button">← Go Back Home</a>
+    </div><br>
+    
+    
+    
+    
+    
+</body>
+</html> 
